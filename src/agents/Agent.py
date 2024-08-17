@@ -8,6 +8,7 @@ from src.losses.LossFunctions import DiceLoss
 import seaborn as sns
 import math
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 class BaseAgent():
     """Base class for all agents. Handles basic training and only needs to be adapted if special use cases are necessary.
@@ -186,8 +187,8 @@ class BaseAgent():
             for m in range(self.output_channels):
                 loss_log[m] = []
             self.initialize_epoch()
-            print('Dataset size: ' + str(len(dataloader)))
-            for i, data in enumerate(dataloader):
+            # print('Dataset size: ' + str(len(dataloader)))
+            for i, data in tqdm(enumerate(dataloader), total=len(dataloader)):
                 loss_item = self.batch_step(data, loss_f)
                 for key in loss_item.keys():
                     loss_log[key].append(loss_item[key])
