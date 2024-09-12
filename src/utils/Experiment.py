@@ -80,6 +80,14 @@ class Experiment():
         print(os.path.join(self.config['model_path'], 'data_split.dt'))
         self.data_split = load_pickle_file(os.path.join(self.config['model_path'], 'data_split.dt'))
         self.projectConfig = load_json_file(os.path.join(self.config['model_path'], 'config.dt'))
+        
+        # Update config with new settings
+        self.projectConfig[0]['n_epoch'] = self.config['n_epoch']
+        self.projectConfig[0]['save_interval'] = self.config['save_interval']
+        self.projectConfig[0]['evaluate_interval'] = self.config['evaluate_interval']
+        self.projectConfig[0]['batch_size'] = self.config['batch_size']
+        self.projectConfig[0]['lr'] = self.config['lr']
+
         self.config = self.projectConfig[0]
         model_path = os.path.join(self.config['model_path'], 'models', 'epoch_' + str(self.currentStep))
         print(model_path)
