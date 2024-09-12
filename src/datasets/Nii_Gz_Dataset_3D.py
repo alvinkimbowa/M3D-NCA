@@ -5,6 +5,7 @@ import numpy as np
 import cv2
 import random
 import torchio
+from PIL import Image
 
 class Dataset_NiiGz_3D(Dataset_3D):
     """This dataset is used for all NiiGz 3D datasets. It can handle 3D data on its own, but is also able to split them into slices. """
@@ -43,7 +44,8 @@ class Dataset_NiiGz_3D(Dataset_3D):
         r"""Loads the data of an image of a given path.
             #Args
                 path (String): The path to the nib file to be loaded."""
-        return nib.load(path).get_fdata()
+        # return nib.load(path).get_fdata()
+        return np.expand_dims(np.asarray(Image.open(path)), -1)
 
     def rotate_image(self, image, angle, label = False):
         image_center = tuple(np.array(image.shape[1::-1]) / 2)
@@ -151,7 +153,7 @@ class Dataset_NiiGz_3D(Dataset_3D):
 
             label_name, _, _ = self.labels_list[idx]
 
-            img, label = self.load_item(os.path.join(self.images_path, img_name)), self.load_item(os.path.join(self.labels_path, img_name))
+            img, label = self.load_item(os.path.join(self.images_path, img_name)), self.load_item(os.path.join(self.labels_path, img_name.replace("_0000", "")))
             # 2D
             if self.slice is not None:
                 if len(img.shape) == 4:
