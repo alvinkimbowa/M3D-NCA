@@ -154,10 +154,13 @@ class Agent_Med_NCA(Agent_Multi_NCA):
         """
         id, inputs, targets = data
 
+        if self.monogenic:
+            inputs = self.model[-1](inputs)
+
         # Create down-scaled image
         down_scaled_size = (int(inputs.shape[1] / 4), int(inputs.shape[2] / 4))
-        inputs_loc = self.resize4d(inputs.cpu(), size=down_scaled_size).to(self.exp.get_from_config('device')) 
-        targets_loc = self.resize4d(targets.cpu(), size=down_scaled_size).to(self.exp.get_from_config('device'))
+        inputs_loc = self.resize4d(inputs.detach().cpu(), size=down_scaled_size).to(self.exp.get_from_config('device')) 
+        targets_loc = self.resize4d(targets.detach().cpu(), size=down_scaled_size).to(self.exp.get_from_config('device'))
 
         # for visualization
         if returnInference:
